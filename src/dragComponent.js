@@ -1,90 +1,55 @@
+import React from 'react';
 
-
-import React, { useState } from 'react';
-
-let placeholder = document.createElement("li");
+var placeholder = document.createElement("li");
 placeholder.className = "placeholder";
 
-export const DragComponent = ({ data, sortData, swap }) => {
-    const [idx, setIdx] = useState(null);
-    const drag = (event) => {
-        console.log('dragging');
+
+class List extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { ...props };
     }
-    const dragStart = (event) => {
-        // console.log('drag start...');
-        event.dataTransfer.setData("Text", event.target.id);
-        console.log(`event.target.id is used by setIdx: ${event.target.id}`);
-
-        setIdx(event.target.id);
+    dragStart(e) {
+        this.dragged = e.currentTarget;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.dragged);
     }
+    dragEnd(e) {
+        this.dragged.style.display = 'block';
+        this.dragged.parentNode.removeChild(placeholder);
 
-    const dragEnd = (event) => {
-        event.dataTransfer.setData("Text", null);
-        setIdx(null);
-
+        // update state
+        var data = this.state.colors;
+        var from = Number(this.dragged.dataset.id);
+        var to = Number(this.over.dataset.id);
+        if (from < to) to--;
+        data.splice(to, 0, data.splice(from, 1)[0]);
+        this.setState({ colors: data });
     }
-
-    const dragEnter = event => {
+    dragOver(e) {
+        e.preventDefault();
+        this.dragged.style.display = "none";
+        if (e.target.className === 'placeholder') return;
+        this.over = e.target;
+        e.target.parentNode.insertBefore(placeholder, e.target);
     }
-
-    const dragLeave = event => {
-        event.target.style.border = "none";
-        event.target.style.height = "40px";
-        event.target.style.padding = "10px";
-        event.target.style.marginButtom = "20px";
-        event.target.style.marginTop = "0px";
+    render() {
+        var listItems = this.state.colors.map((item, i) => {
+            return (
+                <li
+                    data-id={i}
+                    key={i}
+                    draggable='true'
+                    onDragEnd={this.dragEnd.bind(this)}
+                    onDragStart={this.dragStart.bind(this)}>{item}</li>
+            )
+        });
+        return (
+            <ul onDragOver={this.dragOver.bind(this)}>
+                {listItems}
+            </ul>
+        )
     }
-
-    const dragOver = (event) => {
-        event.preventDefault();
-
-        //onDragOver
-        event.target.style.height = "20px";
-        event.target.style.transitionDuration = "400ms";
-
-        if (event.target.id !== idx) {
-            console.log(`dragging over, current event.target.id is: ${event.target.id}, current idx is: ${idx}`);
-            if (event.target.id < idx) {
-                event.target.style.borderTop = "10px solid darkgrey";
-                event.target.style.marginTop = "20px";
-            } else {
-                event.target.style.borderBottom = "10px solid darkgrey";
-                event.target.style.marginBottom = "20px";
-            }
-        } else {
-            event.target.style.marginTop = "0px";
-            event.target.style.marginButtom = "20px";
-        }
-    }
-
-    const drop = (event) => {
-        event.preventDefault();
-        const origin = event.dataTransfer.getData("Text");
-        const replacement = event.target.id;
-        swap(origin, replacement);
-        event.target.style.border = "none";
-        event.target.style.height = "40px";
-        event.target.style.padding = "10px";
-        event.target.style.marginButtom = "20px";
-        event.target.style.marginTop = "0px";
-        setIdx(null);
-    }
-
-    return (
-        <ul className="item-container" onDragOver={event => dragOver(event)}>
-            {
-                data.map((d, idx) =>
-                    <li id={`${idx}`}
-                        className="items"
-                        key={`item${idx}`}
-                        draggable={true}
-                        onDragStart={e => dragStart(e)}
-                        onDragEnd={e => dragEnd(e)}
-                        onDrop={event => drop(event)}>
-                        {d.description}
-                    </li>
-                )
-            }
-        </ul >
-    )
 }
+
+export { List }

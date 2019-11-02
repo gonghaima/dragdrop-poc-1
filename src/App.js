@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import './App.css';
 import { data } from "./mock/data";
-import { DragComponent } from "./dragComponent";
+import { List } from "./dragComponent";
 
 function App() {
   const [originData, setData] = useState(data);
   // const letMeKnow = () => alert('good!!!');
-
+  const [colors, setColors] = useState(['Red', 'Green', 'Blue', 'Yellow', 'Black', 'White', 'Orange']);
   const swap = (origin, replacement) => {
     console.log(`Origin:${origin}, Replacement:${replacement}`);
     let newData = Object.assign([], originData);
@@ -17,10 +17,11 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <DragComponent data={originData} sortData={setData} swap={swap} />
+    <div>
+      <List colors={colors} />
     </div>
   );
 }
 
 export default App;
+
