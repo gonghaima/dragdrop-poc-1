@@ -1,0 +1,50 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+}
+
+.item-container {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #09d3ac;
+}
+
+.items {
+  height: 40px;
+  background: orange;
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  transition: height 0.5s;
+}
+
+.items:hover {
+  cursor: grab;
+}
+
+.items:active:hover {
+  cursor: grabbing;
+  height: 55px;
+}
+
+.items:nth-child(odd) {
+  background: lightgreen;
+}
+
+.hover-enter {
+  height: 25px;
+}
