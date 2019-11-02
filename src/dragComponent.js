@@ -1,6 +1,10 @@
 
 
 import React, { useState } from 'react';
+
+let placeholder = document.createElement("li");
+placeholder.className = "placeholder";
+
 export const DragComponent = ({ data, sortData, swap }) => {
     const [idx, setIdx] = useState(null);
     const drag = (event) => {
@@ -66,24 +70,21 @@ export const DragComponent = ({ data, sortData, swap }) => {
         setIdx(null);
     }
 
-    return (<div className="item-container">
-        {
-            data.map((d, idx) =>
-                <div id={`${idx}`}
-                    className="items"
-                    key={`item${idx}`}
-                    draggable={true}
-                    onDrag={(e) => drag(e)}
-                    onDragStart={e => dragStart(e)}
-                    onDragEnd={e => dragEnd(e)}
-
-                    onDragEnter={event => dragEnter(event)}
-                    onDragOver={event => dragOver(event)}
-                    onDragLeave={event => dragLeave(event)}
-                    onDrop={event => drop(event)}>
-                    {d.description}
-                </div>
-            )
-        }
-    </div >)
+    return (
+        <ul className="item-container" onDragOver={event => dragOver(event)}>
+            {
+                data.map((d, idx) =>
+                    <li id={`${idx}`}
+                        className="items"
+                        key={`item${idx}`}
+                        draggable={true}
+                        onDragStart={e => dragStart(e)}
+                        onDragEnd={e => dragEnd(e)}
+                        onDrop={event => drop(event)}>
+                        {d.description}
+                    </li>
+                )
+            }
+        </ul >
+    )
 }
