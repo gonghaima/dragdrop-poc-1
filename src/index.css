@@ -23,11 +23,13 @@ li {
 }
 
 li:hover {
-  background: darken(#eee, 5%);
+  background: #fff;
 }
 
 .placeholder {
   background: rgb(255, 240, 120);
+  /* transition-duration: 2000ms;
+  transition-delay: 2000ms; */
 }
 
 .placeholder:before {
