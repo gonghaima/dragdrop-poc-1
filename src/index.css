@@ -27,6 +27,10 @@ li:hover {
   cursor: grab;
 }
 
+li:active {
+  cursor: grabbing;
+}
+
 .placeholder {
   background: rgb(255, 240, 120);
   /* transition-duration: 2000ms;

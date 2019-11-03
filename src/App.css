@@ -32,19 +32,6 @@
   transition: height 0.5s;
 }
 
-.items:hover {
-  cursor: grab;
-}
-
-.items:active:hover {
-  cursor: grabbing;
-  height: 55px;
-}
-
-.items:nth-child(odd) {
-  background: lightgreen;
-}
-
 .hover-enter {
   height: 25px;
 }
