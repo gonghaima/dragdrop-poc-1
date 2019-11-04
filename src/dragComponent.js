@@ -1,55 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 var placeholder = document.createElement("li");
 placeholder.className = "placeholder";
 
 
-class List extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { ...props };
-    }
-    dragStart(e) {
-        this.dragged = e.currentTarget;
+export const List = ({ colors }) => {
+    const [internalColors, setInternalColors] = useState(colors);
+    let dragged;
+    let over;
+    let data;
+    let from;
+    let to;
+
+    const dragStart = (e) => {
+        dragged = e.currentTarget;
         e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/html', this.dragged);
+        e.dataTransfer.setData('text/html', dragged);
     }
-    dragEnd(e) {
-        this.dragged.style.display = 'block';
-        this.dragged.parentNode.removeChild(placeholder);
+    const dragEnd = (e) => {
+        dragged.style.display = 'block';
+        dragged.parentNode.removeChild(placeholder);
 
         // update state
-        var data = this.state.colors;
-        var from = Number(this.dragged.dataset.id);
-        var to = Number(this.over.dataset.id);
+        data = internalColors;
+        from = Number(dragged.dataset.id);
+        to = Number(over.dataset.id);
         if (from < to) to--;
         data.splice(to, 0, data.splice(from, 1)[0]);
-        this.setState({ colors: data });
+        debugger
+        setInternalColors([...data]);
     }
-    dragOver(e) {
+    const dragOver = (e) => {
         e.preventDefault();
-        this.dragged.style.display = "none";
+        dragged.style.display = "none";
         if (e.target.className === 'placeholder') return;
-        this.over = e.target;
+        over = e.target;
         e.target.parentNode.insertBefore(placeholder, e.target);
     }
-    render() {
-        var listItems = this.state.colors.map((item, i) => {
-            return (
+
+    return (
+        <ul onDragOver={e => dragOver(e)}>
+            {internalColors.map((item, i) =>
                 <li
                     data-id={i}
                     key={i}
                     draggable='true'
-                    onDragEnd={this.dragEnd.bind(this)}
-                    onDragStart={this.dragStart.bind(this)}>{item}</li>
-            )
-        });
-        return (
-            <ul onDragOver={this.dragOver.bind(this)}>
-                {listItems}
-            </ul>
-        )
-    }
-}
+                    onDragEnd={e => dragEnd(e)}
+                    onDragStart={e => dragStart(e)}>{item}</li>
+            )}
+        </ul>
+    )
 
-export { List }
+}
