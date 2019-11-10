@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-var placeholder = document.createElement("li");
+const placeholder = document.createElement("li");
 placeholder.className = "placeholder";
 
 
@@ -19,7 +19,11 @@ export const List = ({ colors }) => {
     }
     const dragEnd = (e) => {
         dragged.style.display = 'block';
-        dragged.parentNode.removeChild(placeholder);
+
+        if ([...dragged.parentNode.childNodes].includes(placeholder)) { dragged.parentNode.removeChild(placeholder); } else {
+            console.log(`placeholder is not childNodes of dragged.parentNode`);
+
+        }
 
         // update state
         data = internalColors;
@@ -35,7 +39,19 @@ export const List = ({ colors }) => {
         dragged.style.display = "none";
         if (e.target.className === 'placeholder') return;
         over = e.target;
+
+        // e.target.parentNode.insertBefore(placeholder, e.target.nextSibling);
         e.target.parentNode.insertBefore(placeholder, e.target);
+        // debugger
+
+        // if (([...e.target.parentNode.children].length - [...e.target.parentNode.children].indexOf(e.target)) === 2) {
+        //     e.target.parentNode.insertBefore(placeholder, e.target.nextSibling);
+        //     console.log(`222`);
+
+        // } else {
+        //     e.target.parentNode.insertBefore(placeholder, e.target);
+        //     // e.target.parentNode.insertBefore(placeholder, e.target.nextSibling);
+        // }
     }
 
     return (

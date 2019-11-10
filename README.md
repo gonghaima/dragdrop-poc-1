@@ -1,4 +1,4 @@
-# drag and drop version 2 - POC
+# drag and drop version 1 - POC
 
 orginally from
 
